@@ -1,0 +1,31 @@
+{"description":
+  {
+		"version": "1.0",
+		"state":
+		{
+			"attributes":
+			[
+				{"name": "volume", "type": "integer", "range": {"min": 0, "max": 255}},
+				{"name": "power", "type": "boolean", "choice": [false, true]},
+				{"name": "config", "type": "string", "choice": [low, medium, high]},
+				{"name": "mute", "type": "boolean", "choice": [false, true]}
+			]
+		},
+		"events":
+		[
+			{"name": "volume_change_evt", "type": "notify", "attribute": "volume"},
+			{"name": "power-ampli_change_evt", "type": "notify", "attribute": "power", "subscription": "power_change"},
+			{"name": "config_change_evt", "type": "notify", "attribute": "config", "subscription": "config_change"}
+		],
+		"services":
+		[
+			{"name": "volume_up", "type": "setter", "attribute": "volume"},
+			{"name": "volume_down", "type": "setter", "attribute": "volume"},
+			{"name": "set_mute", "type": "setter", "attribute": "volume"},
+			{"name": "change_config", "parameters": [{"name": "config","type": "string", "choice": [low, medium, high]}]}
+		]
+	}
+}
+	
+		
+			
