@@ -1,0 +1,50 @@
+{"description":
+  {
+		"version":"AVD300"
+		"state":
+		{
+			"attributes":
+			[ 
+				{"name": "dvd_contenu", "type": "video", "duration" = {"min": 10, "max": 50}}
+				{"name": "skip_", "type": "array", "value":["forward", "reverse"]},
+				{"name": "onpause", "type": "boolean", "choice": [false, true]},
+				{"name": "onrepeat", "type": "boolean", "choie": [false, true]},
+				{"name":"settings", "type": "string", "choice":["config1", "config2"]},
+				{"name":"entry_dvd", "type":"boolean", "choice":[true, false]},
+				{"name": "volume", "type": "integer", "range": {"min": 0, "max": 255}},
+				{"name": "power", "type": "boolean", "choice": [false, true]}
+			]
+		},
+		"events":
+		[
+			{"name": "power_change_evt", "type": "notify", "attribute": "power", "subscription": "power_swtich"},
+			{"name": "volume_change_evt", "type": "notify", "attribute": "volume", "subscription": "volume_dvd_change"},
+			{"name": "play_dvd_evt", "type": "notify", "attribute": "entry_dvd", "subscription": "entry_dvd_on"},
+			{"name": "stop_dvd_evt", "typ": "notify", "attribute": "entry_dvd", "subscription": "stop_dvd_on"},
+			{"name": "skip_evt", "type": "notify", "attribute": "skip_", "subscription": "skip_on"},
+			{"name": "on_pause_evt", "type": "notify", "attribute":"onpause", "subscription":"on_pause"},
+			{"name": "on_repeat", "type": "notify", "attribute": "onrepeat", "subscription":"on_repeat"},
+			{"name": "settings_change_evt", "type":"notify", "attribute": "settings", "subscription":"settings_change"},
+			/* we send an event to the set top box if there is setting's change*/
+			],
+		"services":
+		[
+			/* PLAY:Start Playback
+			{"name": "play", "parameters": [{"name": "dvd_contenu", "type:"video", "duration" : {"min": "10", "max": "50"}}]}
+			{"name": "stop", "type":"setter", "attribute": "entry_dvd"}
+			{"name": "pause", "type": "setter", "attribute":"dvd_contenu"},
+		    {"name": "repeat", "type": "setter", "attribute":"dvd_contenu"},
+		    /*Scan backward, two times normal speed*/
+			{"name": "skip_previous", "type":"setter", "attribute": "dvd_contenu"},
+			/*Scan forward , two times  normal speed*/
+			{"name": "skip_next", "type":"setter", "attribute": "dvd_contenu"},
+			/*This features zoom the images on the video*/
+		    {"name": "zoom", "type": "setter", "attribute":"dvd_contenu"},
+		    {"name": "forward", "type": "setter", "attribute":"dvd_contenu"},
+		    {"name": "reverse", "type": "setter", "attribute":"dvd_contenu"},
+		    {"name": "slow", "type": "setter", "attribute":"dvd_contenu"},
+		    {"name": "eject", "type": "setter", "attribute":"dvd_contenu"}
+		    /* Display the root menu of the contenu*/
+		]
+	}		
+}
