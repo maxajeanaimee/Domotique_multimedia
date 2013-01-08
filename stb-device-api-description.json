@@ -1,0 +1,58 @@
+{"description":
+    {   
+        "Model_number":"GDB20TTS",
+        "state":
+        {
+            "attributes":
+            [
+                {"name":"mode","type":"array", "choice":["mode_radio","mode_tv","mode_vod","mode_rss","mode_dvd"]},
+                /* mode_radio is used when the set top box have been switched into radio mode*/
+                /* mode_tv is used when the set top box have been switched i  nto tv mode*/
+                /* vod: video on demand*/
+                /* mode_rss: flux rss*/
+                {"name":"volume", "type": "integer", "range": {"min":0, "max":100}}
+                {"name": "channel", "type": "integer", "range": {"min": 1, "max": 50}},
+                /* there is  */
+                {"name": "list_channel", "type": "array[5]", "nb_max":"50", "value": ["channel1","channel2","channel3","channel4","channel5"},
+              /* It's not a complete list, we assume that the set top box has 50 channels
+                */
+                {"name": "subtitle", "type": "boolean", "choice":[false, true]}
+                {"name": "lock", "type": "boolean", "choice":[false, true]}
+                {"name": "power", "type": "boolean", "choice": [false, true]},
+                {"name": "mute", "type":"boolean", "choice":[false, true]}
+                /* Displays the info bar which contains  information about the programme you are currently watching.*/
+	 	        {"name": "info_bar", "type":"boolean", "choice":[false, true]}  
+        ]
+        },
+        "events":
+        [
+            {"name":"mode_to_dvd_evt", "type":"notify", "attribute":"link", "subscription":"mode_to_dvd"},
+            {"name": "power_change_evt", "type":"notify", "attribute":"power", "subscription": "power_change"},
+            {"name": "mode_to_tv_evt",  "type":"notify", "attribute":"mode", "subscription":"mode_to_tv"},
+            {"name": "subtitle_on_evt", "type":"notify", "attribute" :"subtitle", "subscription":"subtitle_on"},
+            {"name": "mode_radio_evt", "type":"notify", "attribute": "mode", "subscription": "radio_config"},
+            {"name": "mode_tv_evt", "type": "notify", "attribute": "mode", "subscription":"tv_mode"},
+            {"name": "mute_change_evt", "type": "notify", "attribute": "mute", "subscription":"mute"},
+            {"name": "mode_change-evt", "type": "notify", "attribute" : "mode", "subscription":"mode_change"}
+        ],
+        /*All information on screen is spoken by the set-top box using 
+        talking features. we can switch talking features on and off using the TF button on the remote control
+        */
+        "services":
+        [
+            {"name": "change_volume", "parameters": [ {"name": "volume", "type": "integer", "range": {"min": 0, "max": 100}} ]},
+            {"name":"change_channel", "parameters": [ {"name": "channel", "type": "integer", "range": {"min": 1, "max": 100}} ]},
+            /* this services lets the user create a list of his favourite programmes */
+            {"name":"favourites_list", "type":"array" , "attribute":"list_channel"}
+            {"name":"video_on_demand", "type":"view_video", "attribute":"mode"},
+           /* the swap function has a toggle action and allows you to switch directly to the previous channel you were watching*/
+           {"name":"swap", "type":"channel", "attributes":"channel"},
+          /* subtitles give you an on-screen text version of the conversation "
+          {"name":"set_subtitle", "type":"setter", "attributes": "subtitle"},
+          /* locked channels allows parents to restrict some channels*/
+            {"name":"locked_channels", "parameters": [{"name":"lock","type":"boolean"},{"name":"channel", "type":"integer"}]
+            {"name":"set_mute", "type":"setter", "attribute": "mute"},
+           {"name": "channel_lists", "type":"getter", "attribute":"list_channels"},
+           
+           /* Programme information, 
+     
