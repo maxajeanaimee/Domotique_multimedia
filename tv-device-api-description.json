@@ -1,0 +1,44 @@
+{"description":
+  {
+		"version": "1.0",
+	 	"vendor": "Samsung",
+		"state":
+		{
+			"attributes":
+			[
+				{"name": "channel", "type": "integer", "range": {"min": -4, "max": 999}},
+/*
+Negative channels are associated to Auxiliary inputs 1 to 4
+*/
+				{"name": "mute", "type": "boolean", "choice": [ false, true ]},
+				{"name": "volume", "type": "integer", "range": {"min": 0, "max": 255}},
+				{"name": "power", "type": "boolean", "choice": [ false, true ]},
+				/* I add this line */
+				{"name": "state_on_dvd", "type": "boolean", "choice": [false,true]},
+				/* this attribute is set to value true if the tv is used to display the item of dvd disc */
+				{"name": "state_on_tv", "type": "boolean", "choice": [false,true]},
+				/* set true if the user is watching standard tv from the set top box */
+			]
+		},
+		"events":
+		[
+			{"name": "channel_change_evt", "type": "notify", "attribute": "channel", "subscription": "channel_change"},
+			{"name": "mute_change_evt", "type": "notify", "attribute": "mute", "subscription": "mute_change"},
+			{"name": "volume_change_evt", "type": "notify", "attribute": "volume", "subscription": "volume_change"},
+			{"name": "power_change_evt", "type": "notify", "attribute": "power", "subscription": "power_change"}
+		],
+		"services":
+		[
+			{"name": "set_channel", "parameters": [ {"name": "channel", "type": "integer", "range": {"min": -4, "max": 999}} ]},
+			{"name": "channel", "type": "getter", "attribute": "channel"},
+			{"name": "set_mute", "type": "setter", "attribute": "mute"},
+/*
+Implicitly, giving a type "setter" and an attribute should be understood as requiring the parameter of the type given in the corresponding attribute.
+*/
+			{"name": "mute", "type": "getter", "attribute": "mute"},
+/*
+TO BE CONTINUED
+*/
+		]
+	}
+}	
