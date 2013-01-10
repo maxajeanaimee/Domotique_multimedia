@@ -1,4 +1,3 @@
-
 #
  # Copyright (C) 2012 ESIROI. All rights reserved.
  # Dynamote is free software: you can redistribute it and/or modify
@@ -14,6 +13,7 @@
  # You should have received a copy of the GNU General Public License
  # along with Dynamote.  If not, see <http://www.gnu.org/licenses/>.
  #
+
 
 import msgpack
 import sys
@@ -103,10 +103,9 @@ class dvd():
             time.sleep(1)
 
     ############################### Publish #####################################
-    def publish(self):
+    def publish(self,port_pub):
 
         print ("Publish to other process ...")
-        port_pub =  "5551"
         dvd_pub.bind("tcp://127.0.0.1:%s" %port_pub)
         entry_dvd = [ 'on','off']
         media = ['mp3', 'mp4', 'avi', 'mkv']
@@ -135,4 +134,3 @@ class dvd():
 
 
 
-v
