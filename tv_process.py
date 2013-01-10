@@ -1,3 +1,4 @@
+
 #
  # Copyright (C) 2012 ESIROI. All rights reserved.
  # Dynamote is free software: you can redistribute it and/or modify
@@ -14,6 +15,8 @@
  # along with Dynamote.  If not, see <http://www.gnu.org/licenses/>.
  #
 
+
+
 import msgpack
 import sys
 import zmq
@@ -24,15 +27,18 @@ from random import choice
 
 class tv():
     
-    channnel =  ["channel1","channel2", "channel3","channel4"]
+    channnel =  ["channel1","channel2", "channel3","channel4","mode_video"]
     power = ["on","off"]
+    source_audio = ["internal", "hifi"]
     state_on_dvd = ["false","true"]
 
 
     def __init__(self,channel):
         self.channel = "channel1"
-        power = "on"
+        self.power = "on"
         self.state_on_dvd = "false"
+        self.source_audio = "internal"
+        
 
     global dynamote
     global tv_req
@@ -111,7 +117,7 @@ class tv():
             tv_packed = msgpack.packb(str(open('tv-device-api-description.json','r')))
             tv_spec = dynamote.socket(zmq.PUSH)
             tv_spec.bind("tcp://*:5555")
-            tv_spec.send(tv_packed)
+            tv_spec.send(tv_packed) 
         except IOError as e:
             print ("I/O error({0}): {1}".format(e.errno, e.strerror))  
     ##################################################################
@@ -124,12 +130,48 @@ class tv():
         mute = ["false", "true"]
         power = ["on", "off"]
         link_statement = ["stb", "DVD"]
-
+        
         while True:
             msg_pub = choice (channel) + " " + choice (mute) + " " + choice (power) + choice (link_statement)
             print(">", msg_pub)
-            socket.send(msg_pub)
+            socket.send_unicode(msg_pub)
+            
+    def subscribe_to_dvd(self, port):
+        print("......waiting for publish on port:%s"%port)
+        tv_sub.connect("tcp://localhost:%s"%port)
+        time.sleep(2)
+        self.state_on_dvd = "true"
+        self.source_audio = "hifi"
+        tv_sub.setsockopt_unicode(zmq.SUBSCRIBE,"on")
+        for i in range (2):
+            print(tv_sub.recv())
 
+
+        print("DVD is on ", ".......", " Mode DVD activated")
+
+    def quit(self):
+         self.power = "off"
+         print("TV is getting down......")
+         
+    def set_channel (self,channel):
+        self.channel = channel
+        print ( " TV is changing channel to %s" %(channel))
+
+
+    def set_mute (self):
+        self.mute = "true"
+        self.source_audio = "null"
+        print(" TV is turing to  mute mode")
+        
+        
+        
+
+
+
+    
+    
+     
+        
 
 
 
