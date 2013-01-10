@@ -1,3 +1,4 @@
+
 #
  # Copyright (C) 2012 ESIROI. All rights reserved.
  # Dynamote is free software: you can redistribute it and/or modify
@@ -11,8 +12,9 @@
  # GNU General Public License for more details.
  #
  # You should have received a copy of the GNU General Public License
- # along with StimTweets.  If not, see <http://www.gnu.org/licenses/>.
+ # along with Dynamote.  If not, see <http://www.gnu.org/licenses/>.
  #
+
 
 import sys
 import zmq
@@ -30,12 +32,11 @@ class ampli():
         ampli_sub = dynamote.socket(zmq.SUB)
                 
     
-    def ready_to_process(self):
+    def ready_to_process(self,port):
 
         #   Autoconfiguration
         # ip_address for connect is 169.254.1.5 on the port 5005
         ip_address = str("169.254.1.5")
-        port = "5005"
         port1 = "5001"
         if len (sys.argv)>1:
             port = sys.argv[1]
@@ -71,10 +72,10 @@ class ampli():
     ## when the middleware receive a message entry_dvd=, it sends a message to the DVD ##################
 
 
-    def subscribe_to_dvd(self):
+    def subscribe_to_dvd(self,port):
 
         ampli_sub = dynamote.socket(zmq.SUB)
-        ampli_sub.connect("tcp://127.0.0.1:5551")
+        ampli_sub.connect("tcp://127.0.0.1:%s"%port)
         topicfilter = "on"
         ampli_sub.setsockopt_unicode(zmq.SUBSCRIBE, topicfilter)
         while True:
