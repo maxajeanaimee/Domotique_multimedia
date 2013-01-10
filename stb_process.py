@@ -1,4 +1,3 @@
-
 #
  # Copyright (C) 2012 ESIROI. All rights reserved.
  # Dynamote is free software: you can redistribute it and/or modify
@@ -15,7 +14,6 @@
  # along with Dynamote.  If not, see <http://www.gnu.org/licenses/>.
  #
 
-
 import msgpack
 import time
 import sys
@@ -28,13 +26,21 @@ class stb():
     Channel = ["channel1", "channel2", "channel3", "channel4"]
     subtitle = ["on", "off"]
     power = ["on", "off"]
+     # Attribut for parental controlling
+    lock = ["false", "true"]
+    
+    mute = ["false", "true" ]
+    info_bar = ["false", "true"]
 
     def __init__(self, mode, channel, subtitle):
         self.mode = "mode_tv"
         self.channel = "channel1"
         self.subtitle = "off"
-        self.power =  "on"
-
+        self.power = "on"
+        self.lock = "false"
+        self.mute = "false"
+        self.info_bar = "true"
+        
 
     global dynamote
     global stb_rep
@@ -100,21 +106,32 @@ class stb():
 
                         
     ####################### Publish_subscribe ######################################
-    def subscribe_to_dvd():
-        #DVD
-        stb_sub.connect("tcp://*:5004")
-        stb_sub.setsockopt(zmq.SUBSCRIBE, "")
-        while True:
-            print(stb_sub.recv())
+    def subscribe_to_dvd(self,port):
+        #DVD subcribe fucntion 
+        print ( " Middleware waiting for publish ....")
+        stb_sub.connect("tcp://localhost:%s"%port)
+        stb_sub.setsockopt_unicode(zmq.SUBSCRIBE, "on")
+        
+        self.mode = "mode_dvd"
+        self.channel = "null"
+        self.subtitle = "on"
+        self.power = "on"
+        self.lock = "false"
+        self.mute = "false"
+        self.infobar = "false"
 
-    def subscribe_to_tv():
-        # TV
-        stb_sub.connect("tcp://*:5001")
-        stb_sub.setsockopt(zmq.SUBSCRIBE, "")
-        while True:
-            print(stb_sub.recv())
-            
+        for i in range (3):
+            print("............There is a DVD disc in the device", stb_sub.recv())
 
+
+    def subscribe_to_tv(self, port):
+        # TV subscribe function
+        print ( "Middleware waiting for publish ...")
+        stb_sub.connect("tcp://localhost:%s")
+        stb_sub.setsockopt(zmq.SUBSCRIBE, "")
+        for i in range (3):
+            print("............There is a TV which is sense", stb_sub.recv())
+    
 
 
 
